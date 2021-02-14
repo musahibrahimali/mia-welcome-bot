@@ -4,6 +4,8 @@ import time
 import os
 import random
 
+PORT = int(os.environ.get('PORT', 5000))
+
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 logger = logging.getLogger(__name__)
@@ -38,7 +40,9 @@ def main():
     dp = updater.dispatcher
     dp.add_handler(MessageHandler(Filters.status_update.new_chat_members, welcome))
     dp.add_error_handler(error)
-    updater.start_polling()
+    # updater.start_polling()
+    updater.start_webhook(listen="0.0.0.0", port=int(PORT), url_path=TOKEN)
+    updater.bot.setWebhook('https://mia-welcome-bot.herokuapp.com/' + TOKEN)
     updater.idle()
 
 if __name__ == '__main__':
